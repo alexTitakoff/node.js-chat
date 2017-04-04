@@ -16,6 +16,9 @@ io.sockets.on('connection', function(socket) {
 
   //Disconnect
 	socket.on('disconnect', function(data) {
+    //if(!socket.username) return;
+    users.slice(users.indexOf(socket.username), 1);
+    updateUserNames();
 		connections.splice(connections.indexOf(socket), 1);
 		console.log('Disconnected: %s sockets disconnected', connections.length);
 	});
@@ -28,5 +31,18 @@ io.sockets.on('connection', function(socket) {
 	});
 
 
+  //New users
+  socket.on('new user', function(data, callback) {
+        callback(true);
+        socket.username = data;
+        users.push(socket.username);
+        updateUserNames();
+  });
+
+
+  function updateUserNames() {
+
+    io.sockets.emit('get users', users);
+  }
 
 });
