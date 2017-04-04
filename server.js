@@ -4,7 +4,7 @@ var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 users = [];
 connections = [];
-server.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT || 3002);
 console.log('Server running');
 app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/index.html');
@@ -27,7 +27,7 @@ io.sockets.on('connection', function(socket) {
   //Send Message
 	socket.on('send message', function(data) {
     console.log(data);
-		io.sockets.emit('new message', {msg: data});
+		io.sockets.emit('new message', {msg: data, user: socket.username});
 	});
 
 
